@@ -1135,10 +1135,10 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.115.tgz#54d171b2ce12c058742443b5f6754760f701b8f9"
   integrity sha512-9K/P4XMQxk61omAzQh3bbbFiqnG17eLcFysjlAYz0aPcYrVo8T+ujaCeIeY0Gpzux7x1YbxtEtLKB7ZWf79qdg==
 
-"@types/marked@0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@types/marked/-/marked-0.4.0.tgz#057a6165703e7419217f8ffc6887747f980b6315"
-  integrity sha512-xkURX55US18wHme+O2UlqJf3Fo7FqT5VAL+OJ/zK+jP2NX57naryDHoiqt/pMIwZjDc62sRvXUWuQQxQiBdheQ==
+"@types/marked@0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@types/marked/-/marked-0.4.2.tgz#64a89e53ea37f61cc0f3ee1732c555c2dbf6452f"
+  integrity sha512-cDB930/7MbzaGF6U3IwSQp6XBru8xWajF5PV2YZZeV8DyiliTuld11afVztGI9+yJZ29il5E+NpGA6ooV/Cjkg==
 
 "@types/mermaid@8.0.0":
   version "8.0.0"
