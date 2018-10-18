@@ -135,13 +135,17 @@ runtime.onMessage(message => {
     }
 })
 
-storage.getSync(({ openFileOnSourcegraph }) => {
+storage.getSync(({ featureFlags: { openFileOnSourcegraph } }) => {
     cmd.setOpenOnSourcegraph(openFileOnSourcegraph)
 })
 
-storage.onChanged(({ openFileOnSourcegraph }) => {
-    if (openFileOnSourcegraph && openFileOnSourcegraph.newValue !== undefined) {
-        cmd.setOpenOnSourcegraph(openFileOnSourcegraph.newValue)
+storage.onChanged(({ featureFlags }) => {
+    if (
+        featureFlags &&
+        featureFlags.newValue.openFileOnSourcegraph &&
+        featureFlags.newValue.openFileOnSourcegraph !== undefined
+    ) {
+        cmd.setOpenOnSourcegraph(featureFlags.newValue.openFileOnSourcegraph)
     }
 })
 

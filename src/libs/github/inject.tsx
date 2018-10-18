@@ -30,7 +30,6 @@ import { combineLatest, forkJoin, from, of, Subject } from 'rxjs'
 import { filter, map, take, withLatestFrom } from 'rxjs/operators'
 import { Disposable } from 'vscode-languageserver'
 import { GitHubBlobUrl } from '.'
-import storage from '../../browser/storage'
 import { applyDecoration, createMessageTransports } from '../../shared/backend/extensions'
 import { createExtensionsContextController } from '../../shared/backend/extensions'
 import {
@@ -87,7 +86,7 @@ const actionsNavItemClassProps = {
     actionItemClass: 'btn btn-sm tooltipped tooltipped-n BtnGroup-item',
 }
 
-function refreshModules(): void {
+async function refreshModules(): Promise<void> {
     for (const el of Array.from(document.getElementsByClassName('sourcegraph-app-annotator'))) {
         el.remove()
     }
@@ -98,16 +97,16 @@ function refreshModules(): void {
         el.classList.remove('sg-annotated')
     }
     hideTooltip()
-    inject()
+    await inject()
 }
 
-window.addEventListener('pjax:end', () => {
-    refreshModules()
+window.addEventListener('pjax:end', async () => {
+    await refreshModules()
 })
 
-export function injectGitHubApplication(marker: HTMLElement): void {
+export async function injectGitHubApplication(marker: HTMLElement): Promise<void> {
     document.body.appendChild(marker)
-    inject()
+    await inject()
 }
 
 function injectCodeIntelligence(): void {
@@ -271,7 +270,7 @@ function injectCodeIntelligence(): void {
     )
 }
 
-function inject(): void {
+async function inject(): Promise<void> {
     featureFlags
         .isEnabled('newInject')
         .then(isEnabled => {
@@ -284,7 +283,7 @@ function inject(): void {
     injectServerBanner()
     injectOpenOnSourcegraphButton()
 
-    injectFileTree()
+    await injectFileTree()
     injectMermaid()
 
     initSearch()
@@ -302,7 +301,7 @@ function hideFileTree(): void {
 
 const specChanges = new Subject<{ repoPath: string; commitID: string }>()
 
-function injectFileTree(): void {
+async function injectFileTree(): Promise<void> {
     if (!repositoryFileTreeEnabled) {
         return
     }
@@ -335,7 +334,7 @@ function injectFileTree(): void {
         return
     }
     if (document.querySelector('.octotree')) {
-        storage.setSync({ repositoryFileTreeEnabled: false })
+        await featureFlags.set('repositoryFileTreeEnabled', false)
         hideFileTree()
         return
     }

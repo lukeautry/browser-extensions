@@ -31,14 +31,14 @@ if (window.SG_ENV === 'EXTENSION') {
     storage.getSync(items => {
         sourcegraphUrl = items.sourcegraphURL
 
-        executeSearchEnabled = items.executeSearchEnabled
+        executeSearchEnabled = items.featureFlags.executeSearchEnabled
 
-        renderMermaidGraphsEnabled = items.renderMermaidGraphsEnabled
+        renderMermaidGraphsEnabled = items.featureFlags.renderMermaidGraphsEnabled
 
-        repositoryFileTreeEnabled = items.repositoryFileTreeEnabled
+        repositoryFileTreeEnabled = items.featureFlags.repositoryFileTreeEnabled
 
-        inlineSymbolSearchEnabled = items.inlineSymbolSearchEnabled
-        useExtensions = items.useExtensions
+        inlineSymbolSearchEnabled = items.featureFlags.inlineSymbolSearchEnabled
+        useExtensions = items.featureFlags.useExtensions
     })
 }
 

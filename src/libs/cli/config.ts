@@ -2,6 +2,8 @@ import * as OmniCLI from 'omnicli'
 
 import { upsertSourcegraphUrl, URLError } from '../../browser/helpers/storage'
 import storage from '../../browser/storage'
+import { repositoryFileTreeEnabled } from '../../shared/util/context'
+import { featureFlags } from '../../shared/util/featureFlags'
 
 const upserUrl = (command: string) => ([url]: string[]) => {
     const err = upsertSourcegraphUrl(url)
@@ -44,30 +46,23 @@ const setUrlCommand: OmniCLI.Command = {
     description: 'Set your primary Sourcegraph Server URL',
 }
 
-function setFileTree([to]: string[]): void {
+async function setFileTree([to]: string[]): Promise<void> {
     if ((to && to === 'true') || to === 'false') {
-        storage.setSync({
-            repositoryFileTreeEnabled: to === 'true',
-        })
+        await featureFlags.set('repositoryFileTreeEnabled', to === 'true')
         return
     }
 
-    storage.getSync(({ repositoryFileTreeEnabled }) =>
-        storage.setSync({ repositoryFileTreeEnabled: !repositoryFileTreeEnabled })
-    )
+    const enabled = await featureFlags.isEnabled('repositoryFileTreeEnabled')
+    await featureFlags.set('repositoryFileTreeEnabled', !enabled)
 }
 
 function getSetFileTreeSuggestions(): Promise<OmniCLI.Suggestion[]> {
-    return new Promise(resolve => {
-        storage.getSync(({ repositoryFileTreeEnabled }) =>
-            resolve([
-                {
-                    content: repositoryFileTreeEnabled ? 'false' : 'true',
-                    description: `${repositoryFileTreeEnabled ? 'Disable' : 'Enable'} File Tree`,
-                },
-            ])
-        )
-    })
+    return featureFlags.isEnabled('repositoryFileTreeEnabled').then(enabled => [
+        {
+            content: repositoryFileTreeEnabled ? 'false' : 'true',
+            description: `${repositoryFileTreeEnabled ? 'Disable' : 'Enable'} File Tree`,
+        },
+    ])
 }
 
 const setFileTreeCommand: OmniCLI.Command = {
@@ -77,30 +72,23 @@ const setFileTreeCommand: OmniCLI.Command = {
     description: 'Set or toggle the File Tree',
 }
 
-function setOpenFileOn([to]: string[]): void {
+async function setOpenFileOn([to]: string[]): Promise<void> {
     if ((to && to === 'true') || to === 'false') {
-        storage.setSync({
-            openFileOnSourcegraph: to === 'true',
-        })
+        await featureFlags.set('openFileOnSourcegraph', to === 'true')
         return
     }
 
-    storage.getSync(({ openFileOnSourcegraph }) => storage.setSync({ openFileOnSourcegraph: !openFileOnSourcegraph }))
+    const enabled = featureFlags.isEnabled('openFileOnSourcegraph')
+    await featureFlags.set('openFileOnSourcegraph', !enabled)
 }
 
 function getSetOpenFileOnSuggestions(): Promise<OmniCLI.Suggestion[]> {
-    return new Promise(resolve => {
-        storage.getSync(({ openFileOnSourcegraph }) =>
-            resolve([
-                {
-                    content: openFileOnSourcegraph ? 'false' : 'true',
-                    description: `Open files from the fuzzy finder on ${
-                        openFileOnSourcegraph ? 'your code host' : 'Sourcegraph'
-                    }`,
-                },
-            ])
-        )
-    })
+    return featureFlags.isEnabled('openFileOnSourcegraph').then(enabled => [
+        {
+            content: enabled ? 'false' : 'true',
+            description: `Open files from the fuzzy finder on ${enabled ? 'your code host' : 'Sourcegraph'}`,
+        },
+    ])
 }
 
 const setOpenFileOnCommand: OmniCLI.Command = {

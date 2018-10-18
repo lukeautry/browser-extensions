@@ -32,7 +32,7 @@ function getSourcegraphURLProps(
 }
 
 export function initSearch(): void {
-    storage.getSync(({ executeSearchEnabled }) => {
+    storage.getSync(({ featureFlags: { executeSearchEnabled } }) => {
         // GitHub search page pathname is <org>/<repo>/search
         if (!executeSearchEnabled || !/\/search$/.exec(window.location.pathname)) {
             return

@@ -78,16 +78,24 @@ function injectApplication(): void {
         if (isGitHub || isGitHubEnterprise) {
             setSourcegraphUrl(sourcegraphServerUrl)
             setRenderMermaidGraphsEnabled(
-                items.renderMermaidGraphsEnabled === undefined ? false : items.renderMermaidGraphsEnabled
+                items.featureFlags.renderMermaidGraphsEnabled === undefined
+                    ? false
+                    : items.featureFlags.renderMermaidGraphsEnabled
             )
             setInlineSymbolSearchEnabled(
-                items.inlineSymbolSearchEnabled === undefined ? false : items.inlineSymbolSearchEnabled
+                items.featureFlags.inlineSymbolSearchEnabled === undefined
+                    ? false
+                    : items.featureFlags.inlineSymbolSearchEnabled
             )
             setRepositoryFileTreeEnabled(
-                items.repositoryFileTreeEnabled === undefined ? true : items.repositoryFileTreeEnabled
+                items.featureFlags.repositoryFileTreeEnabled === undefined
+                    ? true
+                    : items.featureFlags.repositoryFileTreeEnabled
             )
-            setExecuteSearchEnabled(items.executeSearchEnabled === undefined ? true : items.executeSearchEnabled)
-            injectGitHubApplication(extensionMarker)
+            setExecuteSearchEnabled(
+                items.featureFlags.executeSearchEnabled === undefined ? true : items.featureFlags.executeSearchEnabled
+            )
+            await injectGitHubApplication(extensionMarker)
         } else if (isSourcegraphServer || /^https?:\/\/(www.)?sourcegraph.com/.test(href)) {
             setSourcegraphUrl(sourcegraphServerUrl)
             injectSourcegraphApp(extensionMarker)
@@ -110,7 +118,7 @@ function injectApplication(): void {
             }
         }
 
-        setUseExtensions(items.useExtensions === undefined ? false : items.useExtensions)
+        setUseExtensions(items.featureFlags.useExtensions === undefined ? false : items.featureFlags.useExtensions)
     }
 
     storage.getSync(handleGetStorage)
