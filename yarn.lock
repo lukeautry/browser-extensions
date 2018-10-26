@@ -14149,6 +14149,14 @@ sourcegraph@^18.0.0:
     minimatch "^3.0.4"
     rxjs "^6.3.2"
 
+sourcegraph@^18.1.0:
+  version "18.1.0"
+  resolved "https://registry.yarnpkg.com/sourcegraph/-/sourcegraph-18.1.0.tgz#2360099293330a028c48debb5a951404c65b512c"
+  integrity sha512-jUVHz0za6pql5yyR5MFm/FAnVY27w33Zs64ftuCldrRynjuycIjgJsEYoXYQmEBC7X4YefUOmJb+patutk/TxA==
+  dependencies:
+    minimatch "^3.0.4"
+    rxjs "^6.3.2"
+
 spawn-error-forwarder@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/spawn-error-forwarder/-/spawn-error-forwarder-1.0.0.tgz#1afd94738e999b0346d7b9fc373be55e07577029"
